@@ -1,0 +1,87 @@
+[
+    {
+        "id": "e36c10ee-f714-4fcf-980d-c6c35570fe07",
+        "nombre": "Escapada a la Playa",
+        "destino": "Cancún, México",
+        "cantidad_personas": 2,
+        "precio": 500,
+        "dias": 5,
+        "stock": 10,
+        "code": "CANCUN2024",
+        "thumbnails": [
+            "https://example.com/cancun1.jpg",
+            "https://example.com/cancun2.jpg"
+        ],
+        "status": true,
+        "descripcion": "Disfruta de una semana de sol y playa en Cancún.",
+        "categoria": "media"
+    },
+    {
+        "id": "5313a698-4c43-44c0-b79c-f81d36a0433e",
+        "nombre": "Safari en África",
+        "destino": "Serengeti, Tanzania",
+        "cantidad_personas": 2,
+        "precio": 2500,
+        "dias": 10,
+        "stock": 3,
+        "code": "SERENGETI2024",
+        "thumbnails": [
+            "https://example.com/serengeti1.jpg",
+            "https://example.com/serengeti2.jpg"
+        ],
+        "status": true,
+        "descripcion": "Una experiencia única en la vida salvaje de África.",
+        "categoria": "alta"
+    },
+    {
+        "id": "ce54e4e3-0f2b-49f2-8f16-9706d8595934",
+        "nombre": "Aventura en la Selva",
+        "destino": "Amazonas, Brasil",
+        "cantidad_personas": 4,
+        "precio": 1400,
+        "dias": 7,
+        "stock": 5,
+        "code": "AMAZONAS2024",
+        "thumbnails": [
+            "https://example.com/amazonas1.jpg",
+            "https://example.com/amazonas2.jpg"
+        ],
+        "status": true,
+        "descripcion": "Explora la selva amazónica con guías expertos.",
+        "categoria": "alta"
+    },
+    {
+        "id": "dbbaab02-e2ed-4a67-b091-e778ddb82f7a",
+        "nombre": "Turismo en Egipto",
+        "destino": "El Cairo, Egipto",
+        "cantidad_personas": 2,
+        "precio": 950,
+        "dias": 7,
+        "stock": 5,
+        "code": "EGIPTO2024",
+        "thumbnails": [
+            "https://example.com/egipto1.jpg",
+            "https://example.com/egipto2.jpg"
+        ],
+        "status": true,
+        "descripcion": "Explora las maravillas de la antigua civilización egipcia.",
+        "categoria": "media"
+    },
+    {
+        "id": "99b8eb85-cd75-4c1d-af6c-a43e2c5ef2e9",
+        "nombre": "Cultura y Historia",
+        "destino": "Roma, Italia",
+        "cantidad_personas": 2,
+        "precio": 1700,
+        "dias": 6,
+        "stock": 8,
+        "code": "ROMA2024",
+        "thumbnails": [
+            "https://example.com/roma1.jpg",
+            "https://example.com/roma2.jpg"
+        ],
+        "status": true,
+        "descripcion": "Descubre los tesoros históricos de Roma.",
+        "categoria": "media"
+    }
+]
