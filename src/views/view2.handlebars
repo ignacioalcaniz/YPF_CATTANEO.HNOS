@@ -1,0 +1,33 @@
+<h2 class="text-center">PAQUETES AGREGADOS AL CARRITO</h2>
+<div class="row m-5 gap-5 ">
+   
+    {{#each cart}}
+     {{#if products.length}} 
+        {{#each products}}
+            <div class="border border-dark  card gap-2">
+                <p class="text-center"> {{this.nombre}}</p>
+                <img src={{this.imagen}} alt="productImage">
+                <p class="text-center">Precio:${{this.precio}}</p>
+                <p class="text-center">Cantidad: {{this.quantity}}</p>
+                <button >Eliminar</button>
+                <button>Editar</button>
+            </div>
+        {{/each}}
+          {{else}}
+    <p class="text-center">NO HAY PAQUETES AGREGADOS AL CARRITO</p>
+    {{/if}}
+    {{/each}}
+  
+</div>
+
+<style>
+.card{
+    background-color: yellow;
+    width: 300px;
+    height: 500px;
+   object-fit: contain;
+}
+.card:hover{
+    box-shadow: 10px 10px 10px yellow;
+}
+</style>

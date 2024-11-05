@@ -1,14 +1,14 @@
 import multer from "multer";
-import { __dirname } from "../utils.js";
+import path from "path"
 
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, `${__dirname}/public/images`)
+      cb(null, path.join(process.cwd(),"public"))
     },
     filename: function (req, file, cb) {
-      // const Date = new Date().toLocalDateString()
+ 
       cb(null,  file.originalname )
     }
   })

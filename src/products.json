@@ -9,8 +9,7 @@
         "stock": 10,
         "code": "CANCUN2024",
         "thumbnails": [
-            "https://example.com/cancun1.jpg",
-            "https://example.com/cancun2.jpg"
+            "https://expertvagabond.com/wp-content/uploads/cancun-things-to-do-guide-1536x1024.jpg"
         ],
         "status": true,
         "descripcion": "Disfruta de una semana de sol y playa en Cancún.",
@@ -26,8 +25,8 @@
         "stock": 3,
         "code": "SERENGETI2024",
         "thumbnails": [
-            "https://example.com/serengeti1.jpg",
-            "https://example.com/serengeti2.jpg"
+          
+            "https://tse4.mm.bing.net/th?id=OIP.7NIz5T3HDyHzxfqOsWB-7gHaDt&pid=Api&P=0&h=180"
         ],
         "status": true,
         "descripcion": "Una experiencia única en la vida salvaje de África.",
@@ -43,8 +42,8 @@
         "stock": 5,
         "code": "AMAZONAS2024",
         "thumbnails": [
-            "https://example.com/amazonas1.jpg",
-            "https://example.com/amazonas2.jpg"
+           
+            "https://wallpaperaccess.com/full/4736716.jpg"
         ],
         "status": true,
         "descripcion": "Explora la selva amazónica con guías expertos.",
@@ -60,8 +59,8 @@
         "stock": 5,
         "code": "EGIPTO2024",
         "thumbnails": [
-            "https://example.com/egipto1.jpg",
-            "https://example.com/egipto2.jpg"
+        
+            "https://tse1.mm.bing.net/th?id=OIP.F8XqTsUg6x4yOP_5nvWunwHaEM&pid=Api&P=0&h=180"
         ],
         "status": true,
         "descripcion": "Explora las maravillas de la antigua civilización egipcia.",
@@ -69,7 +68,7 @@
     },
     {
         "id": "99b8eb85-cd75-4c1d-af6c-a43e2c5ef2e9",
-        "nombre": "Cultura y Historia",
+        "nombre": "Cultura e Historia",
         "destino": "Roma, Italia",
         "cantidad_personas": 2,
         "precio": 1700,
@@ -77,8 +76,8 @@
         "stock": 8,
         "code": "ROMA2024",
         "thumbnails": [
-            "https://example.com/roma1.jpg",
-            "https://example.com/roma2.jpg"
+           
+            "https://tse1.mm.bing.net/th?id=OIP.CIuyLYkVaEG1n41IP6nuegHaE9&pid=Api&P=0&h=180"
         ],
         "status": true,
         "descripcion": "Descubre los tesoros históricos de Roma.",

@@ -1,7 +1,7 @@
 import fs from "fs";
 import {v4 as uuidv4  } from "uuid";
 import { prodManager } from "./products.manager.js";
-import path  from "path";
+
 
 
 
@@ -60,7 +60,12 @@ class CartPackageManager{
         if(!existingProductInCart){
             const product={
                 id:IdProduct,
+                nombre:productExists.nombre,
+                precio:productExists.precio,
+                personas:productExists.cantidad_personas,
+                imagen:productExists.thumbnails,
                 quantity:1
+                
             }
             cart.products.push(product)
         }else existingProductInCart.quantity +=1;
