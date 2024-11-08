@@ -1,18 +1,13 @@
-import express from "express"
+import express from "express";
 import { urlencoded } from "express";
 import {packageRouter } from "./routes/products.router.js";
 import { UserRouter } from "./routes/user.router.js";
 import { cartRouter } from "./routes/cart.router.js";
 import path from 'path';
-import handlebars from "express-handlebars"
+import handlebars from "express-handlebars";
 import { viewRoutes } from "./routes/views.router.js";
 import { Server } from "socket.io";
-
-
-
-
-
-
+import { prodManager } from "./Manager/products.manager.js";
 
 
 const app = express();
@@ -27,14 +22,6 @@ app.use("/api/users",UserRouter);
 app.use("/api/cart",cartRouter);
 app.use("/",viewRoutes);
 
-
-
-
-
-
-
-
-
  const httpServer=app.listen(3000, () => console.log("listening on port 3000"))
  const socketServer=new Server(httpServer)
 
@@ -45,11 +32,18 @@ app.use("/",viewRoutes);
         console.log("user disconnected:",socket.id)
 
     })
+    socketServer.emit("allProducts",await prodManager.getAll())
+    
 
-    socket.on("producto",()=>{
-
-    })
+    socket.on("newProduct",async(product)=>{
+        await prodManager.createProduct(product)
+        socketServer.emit("productos",await prodManager.getAll())
+        })
+        socket.on("deleteProduct",async(productId)=>{
+            await prodManager.deleteById(productId)
+            socketServer.emit("updateProducts",await prodManager.getAll())
+        })
+})
 
 
    
-  })

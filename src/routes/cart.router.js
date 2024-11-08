@@ -30,8 +30,7 @@ cartRouter.post("/:idCart/product/:idProd", async (req, res) => {
     try {
         const { idProd } = req.params;
         const { idCart } = req.params;
-        const response = await CartManager.saveProductToCart(idCart, idProd);
-        res.json(response);
+        res.json(await CartManager.saveProductToCart(idCart, idProd));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
