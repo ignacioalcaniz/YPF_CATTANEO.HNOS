@@ -1,5 +1,6 @@
-import fs from "fs";
-import { v4 as uuidv4 } from "uuid";
+
+
+import { ProductModel } from "../model/product.model.js";
 
 
 
@@ -7,19 +8,13 @@ import { v4 as uuidv4 } from "uuid";
 
 
 class ProductsPackagesManager{
-    constructor(path){
-        this.path=path
+    constructor(model){
+        this.model=model
     }
+
    async getAll(){
         try {
-            if(fs.existsSync(this.path)){
-                const products=await fs.promises.readFile(this.path,"utf-8");
-                return JSON.parse(products)
-
-            }else{
-                await fs.promises.writeFile(this.path, JSON.stringify([]));
-                return [];
-            }
+            return await this.model.find({})
         } catch (error) {
             throw new Error(error)
         }
@@ -27,18 +22,7 @@ class ProductsPackagesManager{
     }
    async createProduct(obj){
         try {
-            const product={
-                id:uuidv4(),
-                ...obj
-            }
-            const products=await this.getAll()
-            const existProduct= await products.find((p)=>p.id===product.id)
-            if(existProduct){
-                throw new Error("product already exists")
-            }
-            products.push(product)
-            await fs.promises.writeFile(this.path,JSON.stringify(products))
-            return product
+           return await this.model.create(obj)
 
         } catch (error) {
             throw new Error(error)
@@ -47,15 +31,7 @@ class ProductsPackagesManager{
     }
     async getProductbyId(id){
         try {
-            const products=await this.getAll();
-           if(products.length===0){
-            throw new Error("product list is empty")
-           }
-           const product=products.find((p)=>p.id===id)
-           if(!product){
-            throw new Error("product not found")
-           }
-           return product
+           return await this.model.findById(id)
         } catch (error) {
             throw new Error(error)
         }
@@ -63,13 +39,7 @@ class ProductsPackagesManager{
 
     async updateProduct(id,obj){
         try {
-            const products=await this.getAll();
-            let productId =await this.getProductbyId(id)
-            productId={...productId,...obj}      
-            const newArray=products.filter((p)=>p.id !==id)
-            newArray.push(productId)
-            await fs.promises.writeFile(this.path,JSON.stringify(newArray));
-            return productId
+           return await this.model.findByIdAndUpdate(id,obj,{new:true})
          } catch (error) {
             throw new Error(error)
         }
@@ -77,29 +47,17 @@ class ProductsPackagesManager{
     }
     async deleteById(id) {
         try {
-          const productId = await this.getProductbyId(id);
-          const products = await this.getAll();
-          const newArray = products.filter((p) => p.id !== id);
-          await fs.promises.writeFile(this.path, JSON.stringify(newArray));
-          return productId;
+            return await this.model.findByIdAndDelete(id)
         } catch (error) {
           throw new Error(error);
         }
       }
-      async deleteAll() {
-        try {
-          const products = await this.getAll();
-          if (!products.length > 0) throw new Error("products list is empty");
-          await fs.promises.unlink(this.path);
-        } catch (error) {
-          throw new Error(error);
-        }
-      }
+      
     
 
       
 }
-export const prodManager = new ProductsPackagesManager("products.json");
+export const prodManager = new ProductsPackagesManager(ProductModel);
 
 
 

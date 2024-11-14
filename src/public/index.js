@@ -21,7 +21,7 @@ socketClient.on("allProducts", (productos) => {
         return `
             <div class="producto border border-dark gap-1 card w-25">
                 <h2 class="text-center">${p.nombre}</h2>
-                <img src="${p.thumbnails}" alt="productImage" class="img-fluid">
+                <img src="${p.imagen}" alt="productImage" class="img-fluid">
                 <p class="text-center">Precio por persona:$${p.precio}</p>
                 <p class="text-center">Días: ${p.dias}</p>
                 <p class="text-center">Destino: ${p.destino}</p>
