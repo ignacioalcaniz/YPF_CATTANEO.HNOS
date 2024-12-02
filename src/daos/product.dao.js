@@ -12,15 +12,21 @@ class ProductsPackagesManager{
         this.model=model
     }
 
-   async getAll(){
+   async getAll(page=1,limit=10,categoria,sort){
         try {
-            return await this.model.find({})
+            const filter=categoria?{"categoria":categoria}:{}
+            let OrderSort={};
+            if (sort) {
+                OrderSort.precio = sort === "asc" ? 1 : sort === "desc" ? -1 : null;
+            }
+
+            return await this.model.paginate(filter,{page,limit,sort:OrderSort})
         } catch (error) {
             throw new Error(error)
         }
 
     }
-   async createProduct(obj){
+   async create(obj){
         try {
            return await this.model.create(obj)
 
@@ -29,15 +35,16 @@ class ProductsPackagesManager{
         }
 
     }
-    async getProductbyId(id){
+    async getById(id){
         try {
-           return await this.model.findById(id)
+           return await this.model.findById(id).explain()
+       
         } catch (error) {
             throw new Error(error)
         }
     }
 
-    async updateProduct(id,obj){
+    async update(id,obj){
         try {
            return await this.model.findByIdAndUpdate(id,obj,{new:true})
          } catch (error) {
@@ -45,19 +52,22 @@ class ProductsPackagesManager{
         }
 
     }
-    async deleteById(id) {
+    async remove(id) {
         try {
             return await this.model.findByIdAndDelete(id)
         } catch (error) {
           throw new Error(error);
         }
       }
+
+    
+     
       
     
 
       
 }
-export const prodManager = new ProductsPackagesManager(ProductModel);
+export const productDao = new ProductsPackagesManager(ProductModel);
 
 
 

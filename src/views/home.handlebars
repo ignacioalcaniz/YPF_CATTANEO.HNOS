@@ -5,12 +5,12 @@
 
 <div class="border border-dark gap-1 card">
     <h2 class="text-center">{{nombre}}</h2>
-    <img src={{imagen}} alt="productImage">
+    <img src="{{thumbnails}}" alt="productImage">
     <p class="text-center">${{precio}}</p>
     <p class="text-center">Dias:{{dias}}</p>
     <p class="text-center">Destino:{{destino}}</p>
-    <p class="text-center">Cantidad de personas:{{cantidad_personas}}</p>
-    <button class="border-black  " id="boton-comprar" data-id="{{id}}">AGREGAR AL CARRITO</button>
+    <p class="text-center">Cantidad de personas:{{personas}}</p>
+    <button class="border-black  " id="boton-comprar">AGREGAR AL CARRITO</button>
 </div>
 
 {{/each}}

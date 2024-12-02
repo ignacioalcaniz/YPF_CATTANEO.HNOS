@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll,createProduct,updateProduct, deleteById, getProductById} from "../controllers/product.controller.js"
+import { getAll,create,update, remove, getById} from "../controllers/product.controller.js"
 
 
 
@@ -7,8 +7,8 @@ import { getAll,createProduct,updateProduct, deleteById, getProductById} from ".
 export const packageRouter = Router();
 
 packageRouter.get("/", getAll)
-packageRouter.get("/:id", getProductById)
-packageRouter.post("/", createProduct)
-packageRouter.delete("/:id", deleteById)
-packageRouter.put("/:id", updateProduct)
+packageRouter.get("/:id", getById)
+packageRouter.post("/", create)
+packageRouter.delete("/:id", remove)
+packageRouter.put("/:id", update)
 
