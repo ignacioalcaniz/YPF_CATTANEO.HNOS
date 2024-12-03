@@ -12,7 +12,7 @@ class ProductsPackagesManager{
         this.model=model
     }
 
-   async getAll(page=1,limit=10,categoria,sort){
+   async getAll(page,limit,categoria,sort){
         try {
             const filter=categoria?{"categoria":categoria}:{}
             let OrderSort={};
@@ -21,6 +21,7 @@ class ProductsPackagesManager{
             }
 
             return await this.model.paginate(filter,{page,limit,sort:OrderSort})
+          
         } catch (error) {
             throw new Error(error)
         }

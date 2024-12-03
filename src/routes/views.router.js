@@ -9,19 +9,28 @@ export const viewRoutes=Router();
 
 viewRoutes.get("/", async (req, res) => {
     try {
-        const products = await productDao.getAll(); 
+        const { page = 1, limit = 10, categoria, sort } = req.query;
+
+        // Asegúrate de pasar estos parámetros a la función getAll
+        const products = await productDao.getAll(page, limit, categoria, sort);
         
-     
-        const cleanedProducts = products.map(product => {
-            const { _id, __v, ...rest } = product.toObject();  
-            return rest;  
+        
+
+        // Limpiar los productos (eliminar propiedades innecesarias)
+        const cleanedProducts = products.docs.map(product => {
+            const { _id, __v, ...rest } = product.toObject();  // Asegúrate de que product es un documento de Mongoose
+            return rest;
         });
 
-        res.render("index", { products: cleanedProducts });
+        // Enviar los productos a la vista
+        res.render("index", { products: cleanedProducts, pagination: products });
+
     } catch (error) {
-        res.status(500).send("Error al obtener los productos");
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener los productos", error: error.message });
     }
 });
+
 
 
 
