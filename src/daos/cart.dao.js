@@ -3,6 +3,7 @@ import { cartModel } from "../model/cart.model.js";
 
 
 
+
 class CartPackageManager{
     constructor(model){
         this.model=model
@@ -36,32 +37,54 @@ class CartPackageManager{
 
      
 
-      async removeAllProducts(id) {
-     
+      async removeAllProducts(cartId) {
+     try {
+      const response = await this.model.findByIdAndUpdate(
+        cartId, 
+        { $set: { products: [] } }, 
+        { new: true } 
+      );
+      return response;
+     } catch (error) {
+      
+     }
       }
 
-    async addProductToCart(cartId, ProductId){
+      async addProductToCart(cartId, ProductId,quantity) {
+       
+        try {
+      
+            const response = await this.model.findByIdAndUpdate(
+                cartId,
+                 {
+                    $push: { products: ProductId,quantity:quantity } 
+                },
+                { new: true }
+            );
+    
+            return response;
+          }
+         catch (error) {
+            throw new Error(error);
+        }
+    }
+
+      
+
+
+
+      async removeProductFromCart(cartId, ProductId) {
         try {
             const response = await this.model.findByIdAndUpdate(
                 cartId,
-                { $push: { products: ProductId } },
-                { new: true }
-            );       
-            return response
+                { $pull: { products: ProductId } }, 
+                { new: true } 
+            );
+            return response;
         } catch (error) {
             throw new Error(error);
         }
-      }
-
-
-
-      async removeProductFromCart(cartId,ProductId){
-        try {
-          
-        } catch (error) {
-          
-        }
-      }
+    }
     }
 
 

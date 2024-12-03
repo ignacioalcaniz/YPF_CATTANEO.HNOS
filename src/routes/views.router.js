@@ -17,7 +17,7 @@ viewRoutes.get("/", async (req, res) => {
             return rest;  
         });
 
-        res.render("home", { products: cleanedProducts });
+        res.render("index", { products: cleanedProducts });
     } catch (error) {
         res.status(500).send("Error al obtener los productos");
     }

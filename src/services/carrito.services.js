@@ -37,13 +37,39 @@ export const getAll = async () => {
   };
   
 
-export const addProductToCart = async(cartId, productId) => {
+export const addProductToCart = async(cartId, productId,quantity) => {
       try {
-          await Productservices.getById(productId);   
-          const productexist= await CartDao.addProductToCart(cartId, productId);       
+           await Productservices.getById(productId); 
+            const updateProduct=await Productservices.update(productId,{quantity:quantity}) 
+          const productexist= await CartDao.addProductToCart(cartId, productId);   
           if(!productexist) throw new CustomError('Error adding product', 404);
           return productexist;
       } catch (error) {
           throw error;
       }
-  }
+    }
+
+      export const removeProductFromCart = async(cartId, productId) => {
+        try {
+            await Productservices.getById(productId);   
+            const productexist= await CartDao.removeProductFromCart(cartId, productId);       
+            if(!productexist) throw new CustomError('Error deleting product', 404);
+            return productexist;
+        } catch (error) {
+            throw error;
+        }
+      }
+
+      
+      export const removeAllProductFromCart = async(cartId) => {
+        try {
+            
+            const removeAll= await CartDao.removeAllProducts(cartId);       
+            if(!removeAll) throw new CustomError('No Products in cart', 404);
+            return removeAll;
+        } catch (error) {
+            throw error;
+        }
+      }
+
+    
