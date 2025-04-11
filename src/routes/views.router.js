@@ -36,7 +36,7 @@ viewRoutes.get("/", async (req, res) => {
 
 viewRoutes.get("/carrito",async(req,res)=>{
     try {
-        const cart=await  CartDao.getAllCart()
+        const cart=await  CartDao.getAll()
         res.render("carrito",{cart})
     } catch (error) {
         res.status(500).send("Error al obtener los productos del carrito");

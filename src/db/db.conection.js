@@ -1,4 +1,3 @@
-
 import { connect } from "mongoose"
 import "dotenv/config"
 
@@ -8,9 +7,9 @@ import "dotenv/config"
 
 
 
-const MONGO_URL = "mongodb://localhost:27017/flycordoba";
+ const MONGO_URL = "mongodb://localhost:27017/";
 
-console.log(MONGO_URL);
+
 
 export const initMongoDb=async()=>{
     try {

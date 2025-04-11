@@ -5,11 +5,8 @@
 
 <div class="border border-dark gap-1 card">
     <h2 class="text-center">{{nombre}}</h2>
-    <img src="{{thumbnails}}" alt="productImage">
+    <img src="{{imagen}}" alt="productImage">
     <p class="text-center">${{precio}}</p>
-    <p class="text-center">Dias:{{dias}}</p>
-    <p class="text-center">Destino:{{destino}}</p>
-    <p class="text-center">Cantidad de personas:{{personas}}</p>
     <button class="border-black  " id="boton-comprar">AGREGAR AL CARRITO</button>
 </div>
 
@@ -19,10 +16,15 @@
 
 <style>
 .card{
-    background-color: yellow;
+    background-color: blue;
     width: 300px;
     height: 600px;
    object-fit: contain;
+   height: 500px;
+   padding: 10px;
+}
+.card:hover{
+    box-shadow: 5px 5px 5px  black;
 }
 button{
     background-color:  lightgreen;
@@ -30,5 +32,6 @@ button{
 }
 img{
     border: 2px solid black;
+    height: 60%;
 }
 </style>
