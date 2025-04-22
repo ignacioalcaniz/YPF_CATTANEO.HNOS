@@ -13,7 +13,8 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import UserRouter from "./routes/user.router.js";
 import passport from "passport";
-import './config/passport/local-strategy.js';
+import './config/passport/jwt-stratefy.js';
+
 
 const app = express();
 
@@ -72,6 +73,8 @@ socketServer.on("connection", async (socket) => {
         console.log("user disconnected:", socket.id);
     });
 });
+
+
 
 
 

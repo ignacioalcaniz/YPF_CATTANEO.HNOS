@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { userService } from "../../services/user.services.js";
+import { userService } from "./src/services/user.services.js";
 
 const strategyConfig = {
   usernameField: "email",
