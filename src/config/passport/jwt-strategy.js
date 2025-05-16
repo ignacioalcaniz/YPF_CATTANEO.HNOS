@@ -1,6 +1,6 @@
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { userService } from "../../services/user.services.js";
+import { userServices } from "../../services/user.services.js";
 import "dotenv/config";
 
 
@@ -29,7 +29,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userService.getById(id);
+    const user = await userServices.getById(id);
     return done(null, user);
   } catch (error) {
     done(error);

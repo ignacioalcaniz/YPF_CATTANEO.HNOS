@@ -10,7 +10,7 @@ const ProductSchema = new Schema({
     stock: { type: Number, required: true },
     imagen:{type:String,required:true},
     categoria:{type:String,required:true},
-    quantity:{type:Number,required:true}
+    
  
     
 });

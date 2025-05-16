@@ -1,7 +1,8 @@
 import { UserModel } from "../model/user.model.js";
 import MongoDao from "./mongo.dao.js";
+import { CartDao } from "./cart.dao.js";
 
-class UserDao extends MongoDao {
+export default class UserDaoMongo extends MongoDao {
   constructor(model) {
     super(model);
   }
@@ -13,6 +14,14 @@ class UserDao extends MongoDao {
       throw new Error(error);
     }
   };
+
+  getUserById = async (id) => {
+    try {
+      return await this.model.findById(id).populate("cart");
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
-export const userDao = new UserDao(UserModel);
+export const userDaoMongo = new UserDaoMongo(UserModel);

@@ -1,19 +1,23 @@
 import express from "express";
 import { urlencoded } from "express";
-import { packageRouter } from "./routes/products.router.js";
-import { cartRouter } from "./routes/cart.router.js";
 import path from 'path';
 import handlebars from "express-handlebars";
-import { viewRoutes } from "./routes/views.router.js";
 import { Server } from "socket.io";
 import { initMongoDb } from "./db/db.conection.js";
 import { errorHandler } from "./Middlewares/error.handler.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import cookieParser from "cookie-parser";
-import UserRouter from "./routes/user.router.js";
 import passport from "passport";
-import './config/passport/jwt-stratefy.js';
+import './config/passport/jwt-strategy.js';
+import Productrouter from "./routes/products.router.js";
+import TicketRouter from "./routes/ticket.router.js";
+import CartRouter from "./routes/cart.router.js";
+import { viewRoutes } from "./routes/views.router.js";
+import emailRouter from "./routes/email.router.js";
+import UserRouter from "./routes/user.router.js";
+
+
 
 
 const app = express();
@@ -53,10 +57,12 @@ app.set("view engine", "handlebars");
 app.use("/", express.static(path.join(process.cwd(), "public")));
 
 
-app.use("/products", packageRouter);
-app.use("/cart", cartRouter);
-app.use("/", viewRoutes);
-app.use("/user", UserRouter);
+app.use("/products", Productrouter);
+    app.use("/users", UserRouter);
+    app.use("/carts", CartRouter);
+    app.use("/ticket", TicketRouter);
+    app.use("/", viewRoutes);
+    app.use("/email",emailRouter);
 
 initMongoDb()
   .then(() => console.log("Conectado a la base de datos de MongoDB"))

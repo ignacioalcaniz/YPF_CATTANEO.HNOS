@@ -1,62 +1,86 @@
-import { userDao } from "../daos/user.dao.js";
-import { createHash,isValidPassword } from "../utils/user.utils.js";
-import { CustomError } from "../utils/error.custom.js";
 import jwt from "jsonwebtoken";
+import "dotenv/config";
+import { CustomError } from "../utils/error.custom.js";
+import { userDaoMongo } from "../daos/user.dao.js";
+import { createHash,isValidPassword } from "../utils/user.utils.js";
+import UserDTO from "../dto/user.dto.js";
+import { transporter,configMailHbs } from "./email.services.js";
 
-class UserService {
+
+import { CartDao } from "../daos/cart.dao.js";
+
+class UserServices {
   constructor(dao) {
     this.dao = dao;
   }
 
-  register = async (body) => {
-    try {
-      const { email, password } = body;
-      const existUser = await this.dao.getByEmail(email);
-      if (existUser) throw new CustomError("El usuario ya existe", 400);
-      const response = await this.dao.create({
-        ...body,
-        password: createHash(password),
-      });
-      if (!response) throw new CustomError("Error al registrar usuario", 400);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  login = async (email, password) => {
-    try {
-      const userExist = await this.dao.getByEmail(email);
-      if (!userExist) throw new CustomError("Credenciales incorrectas", 400);
-      const passValid = isValidPassword(password, userExist.password);
-      if (!passValid) throw new CustomError("Credenciales incorrectas", 400);
-      return userExist;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  getById = async (id) => {
-    try {
-      return await this.dao.getById(id);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  generateToken = (user) => {
+  generateToken = (user, time = "20m") => {
     const payload = {
-      _id: user._id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      age: user.age,
+      id: user._id,
       role: user.role
     };
-    return jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "20m",
-    });
-  }
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: time });
+  };
+
+  getByEmail = async (email) => {
+    try {
+      return await this.dao.getByEmail(email);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  register = async (user) => {
+    try {
+      const { email, password } = user;
+      const existUser = await this.dao.getByEmail(email);
+      if (existUser) throw new CustomError("El usuario ya existe", 404);
+      const cartUser = await  CartDao.create();
+      if (
+        email === process.env.EMAIL_ADMIN &&
+        password === process.env.PASS_ADMIN
+      ) {
+         await transporter.sendMail(configMailHbs);
+        return await this.dao.create({
+          ...user,
+          password: createHash(password),
+          role: "admin",
+          cart: cartUser._id,
+        });
+      } else {
+         await transporter.sendMail(configMailHbs);
+        return await this.dao.create({
+          ...user,
+          password: createHash(password),
+          cart: cartUser._id,
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  login = async (user) => {
+    try {
+      const { email, password } = user;
+      const userExist = await this.getByEmail(email);
+      if (!userExist) throw new CustomError("credenciales incorrectas", 401);
+      const passValid = isValidPassword(password, userExist.password);
+      if (!passValid) throw new CustomError("credenciales incorrectas", 401);
+      return this.generateToken(userExist);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  getUserById = async (id) => {
+    try {
+      const user = await this.dao.getUserById(id);
+      return new UserDTO(user);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 }
 
-export const userService = new UserService(userDao);
+export const userServices = new UserServices(userDaoMongo);

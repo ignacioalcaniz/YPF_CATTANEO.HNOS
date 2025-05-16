@@ -1,91 +1,116 @@
-import { cartModel } from "../model/cart.model.js";
+import { CartModel } from "../model/cart.model.js";
+import MongoDao from "./mongo.dao.js";
 
 
 
 
 
-class CartPackageManager{
-    constructor(model){
-        this.model=model
+export default class  CartDaoMongo extends MongoDao {
+  constructor(model) {
+    super(model);
+  }
+  create = async () => {
+    try {
+      return await this.model.create({
+        products: [],
+      });
+    } catch (error) {
+      throw new Error(error);
     }
+  };
 
-
-    async getAll() {
-      try {
-        return await this.model.find({});
-      } catch (error) {
-        throw new Error(error);
-      }
+  getById = async (id) => {
+    try {
+      return await this.model.findById(id).populate("products.product");
+    } catch (error) {
+      throw new Error(error);
     }
-  
-    async createCart({nombre}) {
-        try {
-          return await this.model.create({nombre});
-        } catch (error) {
-          throw new Error(error);
-        }
+  };
+
+  addProdToCart = async (cartId, prodId) => {
+    try {
+      const existProdInCart = await this.existProdInCart(cartId, prodId);
+      if (existProdInCart) {
+        return await this.model.findOneAndUpdate(
+          { _id: cartId, "products.product": prodId },
+          {
+            $set: {
+              "products.$.quantity": existProdInCart.products[0].quantity + 1,
+            },
+          },
+          { new: true }
+        );
+      } else {
+        return await this.model.findByIdAndUpdate(
+          cartId,
+          { $push: { products: { product: prodId } } },
+          { new: true }
+        );
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-      async getCartById(id) {
-        try {
-          const response = await this.model.findById(id).populate("products"); 
-          return response;
-        } catch (error) {
-          throw new Error(error);
-        }
-      }
+  existProdInCart = async (cartId, prodId) => {
+    try {
+      return await this.model.findOne({
+        _id: cartId,
+        products: { $elemMatch: { product: prodId } },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-     
-
-      async removeAllProducts(cartId) {
-     try {
-      const response = await this.model.findByIdAndUpdate(
-        cartId, 
-        { $set: { products: [] } }, 
-        { new: true } 
+  removeProdToCart = async (cartId, prodId) => {
+    try {
+      return await this.model.findOneAndUpdate(
+        { _id: cartId },
+        { $pull: { products: { product: prodId } } },
+        { new: true }
       );
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  update = async (id, obj) => {
+    try {
+      const response = await this.model.findByIdAndUpdate(id, obj, {
+        new: true,
+      });
       return response;
-     } catch (error) {
-      
-     }
-      }
-
-      async addProductToCart(cartId, ProductId,quantity) {
-       
-        try {
-      
-            const response = await this.model.findByIdAndUpdate(
-                cartId,
-                 {
-                    $push: { products: ProductId,quantity:quantity } 
-                },
-                { new: true }
-            );
-    
-            return response;
-          }
-         catch (error) {
-            throw new Error(error);
-        }
+    } catch (error) {
+      throw new Error(error);
     }
+  };
 
-      
-
-
-
-      async removeProductFromCart(cartId, ProductId) {
-        try {
-            const response = await this.model.findByIdAndUpdate(
-                cartId,
-                { $pull: { products: ProductId } }, 
-                { new: true } 
-            );
-            return response;
-        } catch (error) {
-            throw new Error(error);
-        }
+  updateProdQuantityToCart = async (cartId, prodId, quantity) => {
+    try {
+      return await this.model.findOneAndUpdate(
+        { _id: cartId, "products.product": prodId },
+        { $set: { "products.$.quantity": quantity } },
+        { new: true }
+      );
+    } catch (error) {
+      throw new Error(error);
     }
+  };
+
+  clearCart = async (cartId) => {
+    try {
+      return await this.model.findByIdAndUpdate(
+        cartId,
+        { $set: { products: [] } },
+        { new: true }
+      );
+    } catch (error) {
+      throw new Error(error);
     }
+  };
+}
 
 
-export const CartDao= new  CartPackageManager(cartModel);
+
+export const CartDao= new  CartDaoMongo(CartModel);

@@ -1,14 +1,15 @@
-import { userService } from "../services/user.services.js";
+import { userServices } from "../services/user.services.js";
+import { createResponse } from "../utils/user.utils.js";
 
-class UserController {
-  constructor(service) {
-    this.service = service;
+export default class UserController {
+  constructor(services) {
+    this.services = services;
   }
 
   register = async (req, res, next) => {
     try {
-      const response = await this.service.register(req.body);
-      res.json(response);
+      const data = await this.services.register(req.body);
+      createResponse(res, 201, data);
     } catch (error) {
       next(error);
     }
@@ -16,16 +17,23 @@ class UserController {
 
   login = async (req, res, next) => {
     try {
-      const { email, password } = req.body;
-      const user = await this.service.login(email, password);
-      const token = this.service.generateToken(user);
-     
-      res.cookie("token", token, { httpOnly: true }).json({ user, token });
+      const token = await this.services.login(req.body);
+      res.cookie("token", token, { httpOnly: true });
+      createResponse(res, 200, token);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  profile = async (req, res, next) => {
+    try {
+      const { id } = req.user;
+      const user = await this.services.getUserById(id);
+      createResponse(res, 200, user);
     } catch (error) {
       next(error);
     }
   };
 }
 
-
-export const userController = new UserController(userService);
+export const userController = new UserController(userServices)

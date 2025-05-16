@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { productDao } from "../daos/product.dao.js";
+import { productDaoMongo } from "../daos/product.dao.js";
 import { CartDao } from "../daos/cart.dao.js";
 
 
@@ -9,21 +9,22 @@ export const viewRoutes=Router();
 
 viewRoutes.get("/", async (req, res) => {
     try {
-        const { page = 1, limit = 10, categoria, sort } = req.query;
+
+        const products = await productDaoMongo.getAll(); 
 
         
-        const products = await productDao.getAll(page, limit, categoria, sort);
-        
-        
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: "No se encontraron productos" });
+        }
 
-       
-        const cleanedProducts = products.docs.map(product => {
-            const { _id, __v, ...rest } = product.toObject();  
+        
+        const cleanedProducts = products.map(product => {
+            const { _id, __v, ...rest } = product.toObject();
             return rest;
         });
 
         
-        res.render("index", { products: cleanedProducts, pagination: products });
+        res.render("index", { products: cleanedProducts });
 
     } catch (error) {
         console.error(error);

@@ -1,75 +1,72 @@
-import { CartDao } from "../daos/cart.dao.js";
-import * as Productservices from "../services/products.services.js";
+import CartDaoMongo from "../daos/cart.dao.js";
 import { CustomError } from "../utils/error.custom.js";
+import { productServices } from "./products.services.js";
 
 
+class CartServices {
+  constructor(dao) {
+    this.dao = dao;
+  }
 
-
-
-export const getAll = async () => {
+  getById = async (id) => {
     try {
-      return await CartDao.getAll();
+      const response = await this.dao.getById(id);
+      if(!response) throw new CustomError('el carrito no existe', 404)
+        return response
     } catch (error) {
       throw new Error(error);
     }
   };
 
-
-    
-  export const create = async (nombre) => {
+  existProdInCart = async (cartId, prodId) => {
     try {
-      const newCart = await CartDao.createCart(nombre);
-      if ( newCart) throw new CustomError("Error create cart", 400);
-      return newCart;
+      const response = await this.dao.existProdInCart(cartId, prodId);
+      if(!response) throw new CustomError('no se encuentra el producto en el carrito', 404)
+        return response
     } catch (error) {
-      throw error;
+      throw new Error(error);
     }
   };
-  
-  export const getById = async (id) => {
+
+  addProdToCart = async (cartId, prodId) => {
     try {
-      const cart = await CartDao.getCartById(id);
-      if (!cart) throw new CustomError("cart Not Found", 404);
-      return cart;
+      const existCart = await this.getById(cartId);
+      const existProd = await productServices.getById(prodId);
+      return await this.dao.addProdToCart(existCart._id, existProd._id);
     } catch (error) {
-      throw error;
+      throw new Error(error);
     }
   };
-  
 
-export const addProductToCart = async(cartId, productId,quantity) => {
-      try {
-           await Productservices.getById(productId); 
-            const updateProduct=await Productservices.update(productId,{quantity:quantity}) 
-          const productexist= await CartDao.addProductToCart(cartId, productId);   
-          if(!productexist) throw new CustomError('Error adding product', 404);
-          return productexist;
-      } catch (error) {
-          throw error;
-      }
+  removeProdToCart = async (cartId, prodId) => {
+    try {
+      const existCart = await this.getById(cartId);
+      const existProdInCart = await this.existProdInCart(cartId, prodId);
+      return await this.dao.removeProdToCart(existCart._id, existProdInCart._id);
+    } catch (error) {
+      throw new Error(error);
     }
+  };
 
-      export const removeProductFromCart = async(cartId, productId) => {
-        try {
-            await Productservices.getById(productId);   
-            const productexist= await CartDao.removeProductFromCart(cartId, productId);       
-            if(!productexist) throw new CustomError('Error deleting product', 404);
-            return productexist;
-        } catch (error) {
-            throw error;
-        }
-      }
+  updateProdQuantityToCart = async (cartId, prodId, quantity) => {
+    try {
+      const existCart = await this.getById(cartId);
+      const existProdInCart = await this.existProdInCart(cartId, prodId);
+      return await this.dao.updateProdQuantityToCart(existCart._id, existProdInCart._id, quantity);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-      
-      export const removeAllProductFromCart = async(cartId) => {
-        try {
-            
-            const removeAll= await CartDao.removeAllProducts(cartId);       
-            if(!removeAll) throw new CustomError('No Products in cart', 404);
-            return removeAll;
-        } catch (error) {
-            throw error;
-        }
-      }
+  clearCart = async (cartId) => {
+    try {
+      const existCart = await this.getById(cartId);
+      return await this.dao.clearCart(existCart._id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+}
 
+export const cartServices = new CartServices(CartDaoMongo);
     

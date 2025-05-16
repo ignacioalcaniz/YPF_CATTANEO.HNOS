@@ -22,13 +22,19 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+   isGoogle: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   role: {
     type: String,
     default: "user",
   },
   cart:{
     type: Schema.Types.ObjectId,
-    ref: "Cart",
+    ref: "carts",
+    default:null
   }
 });
 
