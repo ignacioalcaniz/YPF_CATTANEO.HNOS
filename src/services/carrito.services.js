@@ -1,4 +1,4 @@
-import CartDaoMongo from "../daos/cart.dao.js";
+import { CartDao } from "../daos/cart.dao.js";
 import { CustomError } from "../utils/error.custom.js";
 import { productServices } from "./products.services.js";
 
@@ -30,7 +30,7 @@ class CartServices {
 
   addProdToCart = async (cartId, prodId) => {
     try {
-      const existCart = await this.getById(cartId);
+      const existCart = await this.dao.getById(cartId);
       const existProd = await productServices.getById(prodId);
       return await this.dao.addProdToCart(existCart._id, existProd._id);
     } catch (error) {
@@ -40,7 +40,7 @@ class CartServices {
 
   removeProdToCart = async (cartId, prodId) => {
     try {
-      const existCart = await this.getById(cartId);
+      const existCart = await this.dao.getById(cartId);
       const existProdInCart = await this.existProdInCart(cartId, prodId);
       return await this.dao.removeProdToCart(existCart._id, existProdInCart._id);
     } catch (error) {
@@ -50,7 +50,7 @@ class CartServices {
 
   updateProdQuantityToCart = async (cartId, prodId, quantity) => {
     try {
-      const existCart = await this.getById(cartId);
+      const existCart = await this.dao.getById(cartId);
       const existProdInCart = await this.existProdInCart(cartId, prodId);
       return await this.dao.updateProdQuantityToCart(existCart._id, existProdInCart._id, quantity);
     } catch (error) {
@@ -60,7 +60,7 @@ class CartServices {
 
   clearCart = async (cartId) => {
     try {
-      const existCart = await this.getById(cartId);
+      const existCart = await this.dao.getById(cartId);
       return await this.dao.clearCart(existCart._id);
     } catch (error) {
       throw new Error(error);
@@ -68,5 +68,5 @@ class CartServices {
   };
 }
 
-export const cartServices = new CartServices(CartDaoMongo);
+export const cartServices = new CartServices(CartDao);
     

@@ -12,6 +12,7 @@ export default class CartController {
   }
   addProdToCart = async (req, res, next) => {
     try {
+       console.log("Usuario:", req.user);
       const { cart } = req.user;
       const { idProd } = req.params;
       const newProdToUserCart = await this.services.addProdToCart(

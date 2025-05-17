@@ -1,4 +1,5 @@
 import { productServices } from "../services/products.services.js";
+import { createResponse } from "../utils/user.utils.js";
 
 
 
@@ -7,27 +8,13 @@ class ProductController {
   constructor(services) {
     this.services = services;
   }
-  getAll = async (req, res, next) => {
-     try {
-    const { page, limit,categoria,sort } = req.query;
-    const response = await this.services.getAll(page,limit,categoria,sort);
-    const status = response && response.docs && response.docs.length > 0 ? 'success' : 'error';
-    res.json(({
-      status: status,
-      payload: response.docs,
-      page:response.page,
-      info: {
-        TotalDocs: response.totalDocs,
-        Totalpages: response.totalPages,
-        nextPage: response ? response.nextPage : null,
-        prevPage: response ? response.prevPage : null, 
-        nextLink: response.hasNextPage ? `http://localhost:3000/products?page=${response.nextPage}` : null,
-        prevLink: response.hasPrevPage ? `http://localhost:3000/products?page=${response.prevPage}` : null
-      }
-    }));
-  } catch (error) {
-    next(error);
-  }
+   getAll = async (req, res, next) => {
+    try {
+      const data = await this.services.getAll();
+      createResponse(res, 200, data);
+    } catch (error) {
+      next(error);
+    }
   };
 
   getById = async (req, res, next) => {

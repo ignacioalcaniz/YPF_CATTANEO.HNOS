@@ -17,7 +17,8 @@ class UserServices {
   generateToken = (user, time = "20m") => {
     const payload = {
       id: user._id,
-      role: user.role
+      role: user.role,
+      cart: user.cart,
     };
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: time });
   };
